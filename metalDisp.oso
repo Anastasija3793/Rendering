@@ -2,29 +2,30 @@ OpenShadingLanguage 1.00
 # Compiled by oslc 1.7.4.pixar38bde12
 # options: 
 shader metalDisp
-oparam	float	resultF	0		%read{3,6} %write{6,13}
-oparam	float	disp	0		%read{6,6} %write{5,5}
+oparam	float	resultF	0		%read{3,3} %write{13,13}
+oparam	float	disp	0		%read{13,13} %write{5,5}
 global	point	P	%read{1,1} %write{2147483647,-1} %derivs
-local	point	shaderP	%read{7,10} %write{1,1} %derivs
+local	point	shaderP	%read{6,9} %write{1,1} %derivs
 const	string	$const1	"object"		%read{1,1} %write{2147483647,-1}
 const	string	$const2	"transform"		%read{0,0} %write{2147483647,-1}
 const	string	$const3	"common"		%read{1,1} %write{2147483647,-1}
 temp	color	$tmp1	%read{3,3} %write{2,2}
 const	string	$const4	"rgb"		%read{2,2} %write{2147483647,-1}
-const	int	$const5	0		%read{7,7} %write{2147483647,-1}
+const	int	$const5	0		%read{6,6} %write{2147483647,-1}
 const	float	$const6	0		%read{2,2} %write{2147483647,-1}
 temp	int	$tmp2	%read{4,4} %write{3,3}
-const	float	$const7	-0.5		%read{5,5} %write{2147483647,-1}
-const	string	$const8	"metalDisp.tx"		%read{13,13} %write{2147483647,-1}
-temp	float	$tmp3	%read{8,8} %write{7,7} %derivs
-temp	float	$tmp4	%read{9,9} %write{8,8} %derivs
-const	float	$const10	6		%read{8,11} %write{2147483647,-1}
-const	float	$const11	0.5		%read{9,12} %write{2147483647,-1}
-temp	float	$tmp5	%read{13,13} %write{9,9} %derivs
-const	int	$const12	1		%read{10,10} %write{2147483647,-1}
-temp	float	$tmp6	%read{11,11} %write{10,10} %derivs
-temp	float	$tmp7	%read{12,12} %write{11,11} %derivs
-temp	float	$tmp8	%read{13,13} %write{12,12} %derivs
+const	float	$const7	-0.2		%read{5,5} %write{2147483647,-1}
+temp	float	$tmp3	%read{13,13} %write{12,12}
+const	string	$const8	"metalDisp.tx"		%read{12,12} %write{2147483647,-1}
+temp	float	$tmp4	%read{7,7} %write{6,6} %derivs
+temp	float	$tmp5	%read{8,8} %write{7,7} %derivs
+const	float	$const10	6		%read{7,10} %write{2147483647,-1}
+const	float	$const11	0.5		%read{8,11} %write{2147483647,-1}
+temp	float	$tmp6	%read{12,12} %write{8,8} %derivs
+const	int	$const12	1		%read{9,9} %write{2147483647,-1}
+temp	float	$tmp7	%read{10,10} %write{9,9} %derivs
+temp	float	$tmp8	%read{11,11} %write{10,10} %derivs
+temp	float	$tmp9	%read{12,12} %write{11,11} %derivs
 code ___main___
 # metalDisp.osl:6
 # 	point shaderP = transform("object",P);
@@ -38,18 +39,16 @@ code ___main___
 	eq		$tmp2 resultF $tmp1 	%argrw{"wrr"}
 	if		$tmp2 6 6 	%argrw{"r"}
 # metalDisp.osl:10
-# 		disp = -0.5;
+# 		disp = -0.2;
 	assign		disp $const7 	%line{10} %argrw{"wr"}
-# metalDisp.osl:14
-# resultF = resultF*disp;
-	mul		resultF resultF disp 	%line{14} %argrw{"wrr"}
 # metalDisp.osl:15
-# 	resultF = (float)texture("metalDisp.tx",shaderP[0]/6+0.5,shaderP[1]/6+0.5);
-	compref		$tmp3 shaderP $const5 	%line{15} %argrw{"wrr"}
-	div		$tmp4 $tmp3 $const10 	%argrw{"wrr"}
-	add		$tmp5 $tmp4 $const11 	%argrw{"wrr"}
-	compref		$tmp6 shaderP $const12 	%argrw{"wrr"}
-	div		$tmp7 $tmp6 $const10 	%argrw{"wrr"}
-	add		$tmp8 $tmp7 $const11 	%argrw{"wrr"}
-	texture		resultF $const8 $tmp5 $tmp8 	%argrw{"wrrr"} %argderivs{2,3}
+# 	resultF = (float)texture("metalDisp.tx",shaderP[0]/6+0.5,shaderP[1]/6+0.5)*disp;
+	compref		$tmp4 shaderP $const5 	%line{15} %argrw{"wrr"}
+	div		$tmp5 $tmp4 $const10 	%argrw{"wrr"}
+	add		$tmp6 $tmp5 $const11 	%argrw{"wrr"}
+	compref		$tmp7 shaderP $const12 	%argrw{"wrr"}
+	div		$tmp8 $tmp7 $const10 	%argrw{"wrr"}
+	add		$tmp9 $tmp8 $const11 	%argrw{"wrr"}
+	texture		$tmp3 $const8 $tmp6 $tmp9 	%argrw{"wrrr"} %argderivs{2,3}
+	mul		resultF $tmp3 disp 	%argrw{"wrr"}
 	end

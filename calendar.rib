@@ -22,7 +22,7 @@ TransformBegin
 
 	Bxdf "PxrDisney" "forTheSphere" "color baseColor" [1 1 1] "float roughness" [ 0 ] "float metallic" [ 0.7 ]
 
-	Rotate -90 1 0 0
+	Rotate -60 1 0 0
 
 	#base
 	Cylinder 3 -0.2 0.2 360
@@ -34,13 +34,13 @@ TransformBegin
 		Bxdf "PxrDisney" "forTheDisk" "reference color baseColor" ["myShader:Cout"] "float metallic" [ 0.7 ]
 
 
-		#Pattern "metalDisp" "myShader"
+		Pattern "metalDisp" "myShader"
 		##Pattern "PxrTexture" "myTexture" "string filename" "Flower_pattern_pxr128.tx"
 		##Bxdf "PxrDisney" "forTheDisk" "reference float metallic" ["myTexture:resultF"] "color baseColor" [ 0.8 0.1 0.1 ]
 
 
-		#Attribute "displacementbound" "float sphere" [2]
-		#Displace "PxrDisplace" "displace" "reference float dispScalar" ["myShader:resultF"] "float dispAmount" [-0.1]
+		Attribute "displacementbound" "float sphere" [2]
+		Displace "PxrDisplace" "displace" "reference float dispScalar" ["myShader:resultF"] "float dispAmount" [-0.3]
 		
 	
 		Disk 0.2 3 360
