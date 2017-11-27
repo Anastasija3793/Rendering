@@ -50,6 +50,6 @@ code ___main___
 	add		$tmp8 $tmp7 $const11 	%argrw{"wrr"}
 	texture		resultF $const8 $tmp5 $tmp8 	%argrw{"wrrr"} %argderivs{2,3}
 # metalDisp.osl:15
-# 	resultF = resultF*disp;
+# 	resultF *= disp;
 	mul		resultF resultF disp 	%line{15} %argrw{"wrr"}
 	end
