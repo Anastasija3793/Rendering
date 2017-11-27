@@ -1,0 +1,28 @@
+surface stripe
+	(
+		color Cin  = 1,
+		float pos = 0.5,
+		float width = 0.15,
+	output 	color Cout = 1,
+	output float inStripe = 0,
+	output float disp=0
+)
+{
+point shaderP = transform("object",P);
+color red=color("rgb",1,0,0);
+	float dist=abs(v-pos);
+	float distU = abs(u-pos);
+	float fuzz=0.01;
+	inStripe=1-smoothstep((width*0.5)-fuzz,
+				(width*0.5)+fuzz,
+				dist);
+ //float inLine=1-smoothstep(0.1-fuzz,0.1+fuzz,dist);
+	//Cout=inLine*Cin;
+float mask = smoothstep(shaderP[0]-fuzz, shaderP[0]+fuzz, distU);
+mask += (1-mask);
+
+disp=inStripe * ( mask);
+
+Cout=mix(Cin,red,inStripe);
+Cout = color(1,1,1);
+}

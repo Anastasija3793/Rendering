@@ -1,0 +1,11 @@
+shader dates (
+	color Cin=1,
+output	color Cout=1
+)
+{
+	//color silver=color("rgb",0.39,0.39,0.39);
+	point shaderP = transform("object",P);
+	Cout=(color)texture("metal.tx",shaderP[0]/6+0.5,shaderP[1]/6+0.5);
+	//Cout=1-mix(Cin,silver,(texture("golden.tx",shaderP[0]/6+0.5,shaderP[1]/6+0.5)));
+}
+

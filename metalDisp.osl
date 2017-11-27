@@ -1,0 +1,20 @@
+shader metalDisp (
+output	float resultF=0,
+output float disp=0
+)
+{
+	point shaderP = transform("object",P);
+	
+	
+	if (resultF == color ("rgb",0,0,0))
+		disp = -0.5;
+
+
+	//resultF for displacement
+resultF = resultF*disp;
+	resultF = (float)texture("metalDisp.tx",shaderP[0]/6+0.5,shaderP[1]/6+0.5);
+
+
+
+	//Cout=(color)texture("metal.tx",shaderP[0]/6+0.5,shaderP[1]/6+0.5);
+}

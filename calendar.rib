@@ -1,0 +1,65 @@
+#calendar.rib
+Option "searchpath" "archive" ["."]
+Display "calendar.exr" "it" "rgb"
+Format 640 480 1.0
+
+Hider "raytrace" "int incremental" [1]
+
+Integrator "PxrPathTracer" "integrator"
+
+Projection "perspective" "fov" [ 70 ]
+
+#Translate 0 -0.5 3
+Rotate -90 1 0 0
+Translate 0 -6 0
+
+WorldBegin
+
+Light "PxrDomeLight" "theLight" "float exposure" [0] "string lightColorMap" ["../area.tx"]
+
+TransformBegin
+
+
+	Bxdf "PxrDisney" "forTheSphere" "color baseColor" [1 1 1] "float roughness" [ 0 ] "float metallic" [ 0.7 ]
+
+	Rotate -90 1 0 0
+
+	#base
+	Cylinder 3 -0.2 0.2 360
+	
+	#top disk (with dates)
+	AttributeBegin
+		ReadArchive "screw.rib"
+		Pattern "dates" "myShader" #"color Cin" [1 1 1]
+		Bxdf "PxrDisney" "forTheDisk" "reference color baseColor" ["myShader:Cout"] "float metallic" [ 0.7 ]
+
+
+		#Pattern "metalDisp" "myShader"
+		##Pattern "PxrTexture" "myTexture" "string filename" "Flower_pattern_pxr128.tx"
+		##Bxdf "PxrDisney" "forTheDisk" "reference float metallic" ["myTexture:resultF"] "color baseColor" [ 0.8 0.1 0.1 ]
+
+
+		#Attribute "displacementbound" "float sphere" [2]
+		#Displace "PxrDisplace" "displace" "reference float dispScalar" ["myShader:resultF"] "float dispAmount" [-0.1]
+		
+	
+		Disk 0.2 3 360
+	AttributeEnd
+
+	#bottom disk
+	AttributeBegin
+		#Translate 0 0 1
+		Disk -0.2 3 360
+	AttributeEnd
+	#ring with chain
+	AttributeBegin
+		Rotate -90 1 -90 0
+		Translate 0 -3.3 0
+		Torus 0.6 0.12 0 360 360
+	AttributeEnd
+
+TransformEnd
+
+
+
+WorldEnd

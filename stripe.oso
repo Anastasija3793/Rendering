@@ -1,0 +1,95 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.7.4.pixar38bde12
+# options: 
+surface stripe
+param	color	Cin	1 1 1		%read{22,22} %write{2147483647,-1}
+param	float	pos	0.5		%read{3,5} %write{2147483647,-1}
+param	float	width	0.15000001		%read{8,10} %write{2147483647,-1}
+oparam	color	Cout	1 1 1		%read{2147483647,-1} %write{22,23}
+oparam	float	inStripe	0		%read{21,22} %write{13,13}
+oparam	float	disp	0		%read{2147483647,-1} %write{21,21}
+global	point	P	%read{1,1} %write{2147483647,-1}
+global	float	u	%read{5,5} %write{2147483647,-1}
+global	float	v	%read{3,3} %write{2147483647,-1}
+local	point	shaderP	%read{14,16} %write{1,1}
+local	color	red	%read{22,22} %write{2,2}
+local	float	dist	%read{12,12} %write{4,4}
+local	float	distU	%read{18,18} %write{6,6}
+local	float	fuzz	%read{9,17} %write{7,7}
+local	float	mask	%read{19,21} %write{18,20}
+const	string	$const1	"object"		%read{1,1} %write{2147483647,-1}
+const	string	$const2	"transform"		%read{0,0} %write{2147483647,-1}
+const	string	$const3	"common"		%read{1,1} %write{2147483647,-1}
+const	string	$const4	"rgb"		%read{2,2} %write{2147483647,-1}
+const	float	$const6	1		%read{2,19} %write{2147483647,-1}
+const	int	$const7	0		%read{14,16} %write{2147483647,-1}
+const	float	$const8	0		%read{2,2} %write{2147483647,-1}
+temp	float	$tmp1	%read{4,4} %write{3,3}
+temp	float	$tmp2	%read{6,6} %write{5,5}
+const	float	$const9	0.0099999998		%read{7,7} %write{2147483647,-1}
+temp	float	$tmp3	%read{13,13} %write{12,12}
+const	float	$const10	0.5		%read{8,10} %write{2147483647,-1}
+temp	float	$tmp4	%read{9,9} %write{8,8}
+temp	float	$tmp5	%read{12,12} %write{9,9}
+temp	float	$tmp6	%read{11,11} %write{10,10}
+temp	float	$tmp7	%read{12,12} %write{11,11}
+temp	float	$tmp8	%read{15,15} %write{14,14}
+temp	float	$tmp9	%read{18,18} %write{15,15}
+temp	float	$tmp10	%read{17,17} %write{16,16}
+temp	float	$tmp11	%read{18,18} %write{17,17}
+temp	float	$tmp12	%read{20,20} %write{19,19}
+const	color	$const11	1 1 1		%read{23,23} %write{2147483647,-1}
+code ___main___
+# stripe.osl:11
+# point shaderP = transform("object",P);
+	functioncall	$const2 2 	%filename{"stripe.osl"} %line{11} %argrw{"r"}
+# /opt/pixar/RenderManProServer-21.5/lib/osl/include/stdosl.h:243
+# }
+	transform	shaderP $const3 $const1 P 	%filename{"/opt/pixar/RenderManProServer-21.5/lib/osl/include/stdosl.h"} %line{243} %argrw{"wrrr"}
+# stripe.osl:12
+# color red=color("rgb",1,0,0);
+	color		red $const4 $const6 $const8 $const8 	%filename{"stripe.osl"} %line{12} %argrw{"wrrrr"}
+# stripe.osl:13
+# 	float dist=abs(v-pos);
+	sub		$tmp1 v pos 	%line{13} %argrw{"wrr"}
+	abs		dist $tmp1 	%argrw{"wr"}
+# stripe.osl:14
+# 	float distU = abs(u-pos);
+	sub		$tmp2 u pos 	%line{14} %argrw{"wrr"}
+	abs		distU $tmp2 	%argrw{"wr"}
+# stripe.osl:15
+# 	float fuzz=0.01;
+	assign		fuzz $const9 	%line{15} %argrw{"wr"}
+# stripe.osl:16
+# 	inStripe=1-smoothstep((width*0.5)-fuzz,
+	mul		$tmp4 width $const10 	%line{16} %argrw{"wrr"}
+	sub		$tmp5 $tmp4 fuzz 	%argrw{"wrr"}
+# stripe.osl:17
+# 				(width*0.5)+fuzz,
+	mul		$tmp6 width $const10 	%line{17} %argrw{"wrr"}
+	add		$tmp7 $tmp6 fuzz 	%argrw{"wrr"}
+# stripe.osl:18
+# 				dist);
+	smoothstep	$tmp3 $tmp5 $tmp7 dist 	%line{18} %argrw{"wrrr"}
+	sub		inStripe $const6 $tmp3 	%argrw{"wrr"}
+# stripe.osl:21
+# float mask = smoothstep(shaderP[0]-fuzz, shaderP[0]+fuzz, distU);
+	compref		$tmp8 shaderP $const7 	%line{21} %argrw{"wrr"}
+	sub		$tmp9 $tmp8 fuzz 	%argrw{"wrr"}
+	compref		$tmp10 shaderP $const7 	%argrw{"wrr"}
+	add		$tmp11 $tmp10 fuzz 	%argrw{"wrr"}
+	smoothstep	mask $tmp9 $tmp11 distU 	%argrw{"wrrr"}
+# stripe.osl:22
+# mask += (1-mask);
+	sub		$tmp12 $const6 mask 	%line{22} %argrw{"wrr"}
+	add		mask mask $tmp12 	%argrw{"wrr"}
+# stripe.osl:24
+# disp=inStripe * ( mask);
+	mul		disp inStripe mask 	%line{24} %argrw{"wrr"}
+# stripe.osl:26
+# Cout=mix(Cin,red,inStripe);
+	mix		Cout Cin red inStripe 	%line{26} %argrw{"wrrr"}
+# stripe.osl:27
+# Cout = color(1,1,1);
+	assign		Cout $const11 	%line{27} %argrw{"wr"}
+	end
