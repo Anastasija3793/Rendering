@@ -15,7 +15,7 @@ Translate 0 -6 0
 
 WorldBegin
 
-Light "PxrDomeLight" "theLight" "float exposure" [0] "string lightColorMap" ["../area.tx"]
+Light "PxrDomeLight" "theLight" "float exposure" [0] "string lightColorMap" ["area.tx"]
 
 TransformBegin
 
@@ -37,7 +37,7 @@ TransformBegin
 		#displacement for years and week days
 		Pattern "metalDisp" "myShader"
 		Attribute "displacementbound" "float sphere" [2]
-		Displace "PxrDisplace" "displace" "reference float dispScalar" ["myShader:resultF"] "float dispAmount" [-0.3]
+		Displace "PxrDisplace" "displace" "reference float dispScalar" ["myShader:resultF"] "float dispAmount" [0.3]
 
 
 #		Pattern "PxrVoronoise" "noiseTexture"
