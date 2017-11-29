@@ -39,7 +39,7 @@ TransformBegin
 	AttributeBegin
 		ReadArchive "screw.rib"
 		#dates shader
-		Pattern "dates" "myShader1" ##"color Cin" [1 1 1]
+		Pattern "dates" "myShader1" #"color Cin" [1 1 1]
 		Bxdf "PxrDisney" "forTheDisk" "reference color baseColor" ["myShader1:Cout"] "reference float metallic" ["noiseTexture:resultF"] "float roughness" [ 0 ] 
 
 		#displacement for years and week days
