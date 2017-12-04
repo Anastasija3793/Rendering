@@ -14,7 +14,7 @@ const	string	$const4	"uperlin"		%read{4,4} %write{2147483647,-1}
 const	int	$const5	0		%read{2,2} %write{2147483647,-1}
 temp	float	$tmp2	%read{3,3} %write{2,2}
 temp	float	$tmp3	%read{4,4} %write{3,3}
-const	float	$const7	200		%read{3,3} %write{2147483647,-1}
+const	float	$const7	100		%read{3,3} %write{2147483647,-1}
 code ___main___
 # noiseMetal.osl:7
 #     point PP=transform("referenceFrame",P);
@@ -23,7 +23,7 @@ code ___main___
 # vector transform (matrix Mto, vector p) BUILTIN;
 	transform	PP $const3 $const1 P 	%filename{"/opt/pixar/RenderManProServer-21.4/lib/osl/include/stdosl.h"} %line{243} %argrw{"wrrr"}
 # noiseMetal.osl:10
-#     Cout=(float)noise("uperlin",PP[0]*200);
+#     Cout=(float)noise("uperlin",PP[0]*100);
 	compref		$tmp2 PP $const5 	%filename{"noiseMetal.osl"} %line{10} %argrw{"wrr"}
 	mul		$tmp3 $tmp2 $const7 	%argrw{"wrr"}
 	noise		$tmp1 $const4 $tmp3 	%argrw{"wrr"}

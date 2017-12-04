@@ -22,7 +22,7 @@ TransformBegin
 
 	CoordinateSystem "referenceFrame"
 	Pattern "noiseMetal" "noise" #"color Cin" [1 1 1]
-	Pattern "faceMix" "reference color c1" ["noise:Cout"]
+	Pattern "faceMix" "faceMix" "reference color c1" ["noise:Cout"]
 			"reference color c2" ["myShader1:Cout"]
 	Bxdf "PxrDisney" "forTheDisk" "reference color baseColor" ["faceMix:Cout"] "float metallic" [0.7] "float roughness" [ 0.1 ] 
 
