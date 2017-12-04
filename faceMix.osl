@@ -1,0 +1,12 @@
+shader faceMix(
+	color c1=0,
+	color c2=0,
+output  color Cout=0
+	)
+{
+normal NN=transform("referenceFrame",N);
+if(NN[2]<0)
+	Cout=c1;
+else
+	Cout=c2;
+}

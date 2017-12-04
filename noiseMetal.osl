@@ -4,9 +4,9 @@ output	color Cout=1
 //output float resulF=0
 )
 {
-    point PP=transform("shader",P);
+    point PP=transform("referenceFrame",P);
     //Cout=(color)noise("uperlin",PP*10);
     //Cout=(float)noise("uperlin",PP[0]*100)+0.5;
-    Cout=(float)noise("uperlin",PP[0]*100);
+    Cout=(float)noise("uperlin",PP[0]*200);
 }
 

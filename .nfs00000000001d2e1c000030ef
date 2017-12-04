@@ -20,24 +20,22 @@ Light "PxrDomeLight" "theLight" "float exposure" [0] "string lightColorMap" ["ar
 TransformBegin
 
 
-	CoordinateSystem "referenceFrame"
-	Pattern "noiseMetal" "noise" #"color Cin" [1 1 1]
-	Pattern "faceMix" "reference color c1" ["noise:Cout"]
-			"reference color c2" ["myShader1:Cout"]
-	Bxdf "PxrDisney" "forTheDisk" "reference color baseColor" ["faceMix:Cout"] "float metallic" [0.7] "float roughness" [ 0.1 ] 
+
+#	Pattern "noiseMetal" "noise" #"color Cin" [1 1 1]
+#	Bxdf "PxrDisney" "forTheDisk" "reference color baseColor" ["noise:Cout"] "reference float metallic" ["noiseTexture:resultF"] "float roughness" [ 0 ] 
 
 
 
 
-#	Pattern "PxrVoronoise" "noiseTexture"
-#		"float frequency" [5]
-#		"float jitter" [0.5]
-#		"float smoothness" [0]
-#	Bxdf "PxrDisney" "forTheSphere" 
-#		"color baseColor" [1 1 1] 
-#		"reference float metallic" ["noiseTexture:resultF"]
-#		"float roughness" [ 0 ] 
-#		#"float metallic" [ 0.7 ]
+	Pattern "PxrVoronoise" "noiseTexture"
+		"float frequency" [5]
+		"float jitter" [0.5]
+		"float smoothness" [0]
+	Bxdf "PxrDisney" "forTheSphere" 
+		"color baseColor" [1 1 1] 
+		"reference float metallic" ["noiseTexture:resultF"]
+		"float roughness" [ 0 ] 
+		#"float metallic" [ 0.7 ]
 
 	Rotate -90 1 0 0
 
@@ -49,7 +47,7 @@ TransformBegin
 		ReadArchive "screw.rib"
 		#dates shader
 		Pattern "dates" "myShader1" #"color Cin" [1 1 1]
-		Bxdf "PxrDisney" "forTheDisk" "reference color baseColor" ["myShader1:Cout"] "float metallic" [0.7] "float roughness" [ 0.1 ] 
+		Bxdf "PxrDisney" "forTheDisk" "reference color baseColor" ["myShader1:Cout"] "reference float metallic" ["noiseTexture:resultF"] "float roughness" [ 0 ] 
 
 		#displacement for years and week days
 		Pattern "metalDisp" "myShader"
