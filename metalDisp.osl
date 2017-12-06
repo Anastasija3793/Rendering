@@ -11,7 +11,8 @@ output float disp=0
 
 
 	//resultF for displacement
-	resultF = 1-(float)texture("metalDisp.tx",shaderP[0]/6.7+0.5,shaderP[1]/6.7+0.5);
+	//resultF = 1-(float)texture("metalDisp.tx",shaderP[0]/6.7+0.5,shaderP[1]/6.7+0.5);
+	resultF = 1-(float)texture("metalDispT.tx",shaderP[0]/7.4+0.5,shaderP[1]/7.4+0.5);
 	resultF *= disp;
 
 }
