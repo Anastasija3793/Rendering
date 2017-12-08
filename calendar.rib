@@ -1,5 +1,6 @@
 #calendar.rib
 Option "searchpath" "archive" ["."]
+Option "searchpath" "texture" ["./envMaps"]
 Display "calendar.exr" "it" "rgb"
 Format 640 480 1.0
 
@@ -31,7 +32,7 @@ TransformBegin
 Bxdf "PxrDisney" "forTheDisk" "reference color baseColor" ["faceMix:Cout"] "float metallic" [0.7] "float roughness" [ 0.1 ] 
 
 
-	Rotate -60 1 0 0
+	Rotate -90 1 0 0
 
 	#base
 	Cylinder 3 -0.2 0.2 360
@@ -39,7 +40,7 @@ Bxdf "PxrDisney" "forTheDisk" "reference color baseColor" ["faceMix:Cout"] "floa
 	#top disk (with dates)
 	AttributeBegin
 #change shader name for screw.rib
-		#ReadArchive "screw.rib"
+		ReadArchive "screw.rib"
 		#dates shader 
 		
 		#displacement for years and week days

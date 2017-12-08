@@ -5,10 +5,26 @@ output  color Cout=0
 	)
 {
 normal NN=transform("referenceFrame",N);
-//if(NN[2]<0)
-//	Cout=c1;
+//if(NN[1]<0)
+//	if(c2[0] >= 0.7)
+//	Cout = mix(c1, c2, noise("perlin", P)*0.2);
 //else
 //	Cout=c2;
+
+
+
+
+
+
+
+
+//if(NN[1]<0)
+//	Cout=c1;
+//else
+// Cout=c2;
+
+
+
 if(c2[0] < 0.7)
 //< 0.2
 	Cout = c2;
