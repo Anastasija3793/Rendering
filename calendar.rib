@@ -23,33 +23,28 @@ TransformBegin
 
 
 	CoordinateSystem "referenceFrame"
-	#noise shader
-	Pattern "noiseMetal" "noise" #"color Cin" [1 1 1]
-	#dates shader
-	Pattern "dates" "myShader1" #"color Cin" [1 1 1]
-	Pattern "faceMix" "faceMix" "reference color c1" ["noise:Cout"] "reference color c2" ["myShader1:Cout"]
-	
-Bxdf "PxrDisney" "forTheDisk" "reference color baseColor" ["faceMix:Cout"] "float metallic" [0.7] "float roughness" [ 0.1 ] 
-
+	Pattern "objshader" "object"
+	Bxdf "PxrDisney" "forTheDisk" "reference color baseColor" ["object:Cout"] "float metallic" [0.7] "float roughness" [ 0.1 ]
 
 	Rotate -90 1 0 0
+	#Rotate 90 0 1 0
+	#Rotate -45 0 0 1
 
 	#base
 	Cylinder 3 -0.2 0.2 360
 	
 	#top disk (with dates)
 	AttributeBegin
-#change shader name for screw.rib
-		ReadArchive "screw.rib"
-		#dates shader 
-		
+		#screw
+		AttributeBegin
+			Bxdf "PxrDisney" "forTheScrew" "reference color baseColor" ["object:forScrew"] "float metallic" [ 0.7 ] "float roughness" [ 0.1 ]
+			ReadArchive "screw.rib"
+		AttributeEnd
+
 		#displacement for years and week days
-		Pattern "metalDisp" "myShader"
 		Attribute "displacementbound" "float sphere" [2]
-		Displace "PxrDisplace" "displace" "reference float dispScalar" ["myShader:resultF"] "float dispAmount" [0.3]
-		
-	
-		Disk 0.2 3 360
+		Displace "PxrDisplace" "displace" "reference float dispScalar" ["object:disp"] "float dispAmount" [0.2]
+		Disk 0.16 3 360
 	AttributeEnd
 
 	#bottom disk
@@ -59,6 +54,7 @@ Bxdf "PxrDisney" "forTheDisk" "reference color baseColor" ["faceMix:Cout"] "floa
 	AttributeEnd
 	#ring with chain
 	AttributeBegin
+		Bxdf "PxrDisney" "forTheTorus" "reference color baseColor" ["object:forScrew"] "float metallic" [ 0.7 ] "float roughness" [ 0.1 ]
 		Rotate -90 1 -90 0
 		Translate 0 -3.3 0
 		Torus 0.6 0.12 0 360 360

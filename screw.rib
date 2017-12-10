@@ -1,15 +1,14 @@
 #screw.rib
 TransformBegin
 	Rotate -90 0 0 1
-	Translate 0.05 0.05 0.25
+	Translate 0.05 0.05 0.23
 	Scale 0.2 0.2 0.2
 	#Scale 0.6 0.6 0.6
-	Pattern "stripe" "stripe" #"color Cin" [1 1 1]
-	#Bxdf "PxrDisney" "forTheSphere" "reference color baseColor" ["stripe:Cout"] "float metallic" [ 0.7 ] "float roughness" [ 0.1 ]
+	Pattern "stripe" "stripeDisp"
 
 AttributeBegin	
 	Attribute "displacementbound" "float sphere" [2]
-	Displace "PxrDisplace" "displace" "reference float dispScalar" ["stripe:disp"] "float dispAmount" [-0.1]
+	Displace "PxrDisplace" "displace" "reference float dispScalar" ["stripeDisp:disp"] "float dispAmount" [-0.1]
 	Translate 0 0 0.1
 	Rotate 90 1 0 0
 	Rotate -45 0 1 0
