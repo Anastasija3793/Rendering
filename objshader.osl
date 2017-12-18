@@ -1,53 +1,87 @@
-//combine all shaders for calendar
+//functions for calendar shader
 
-float noiseMetal (point PP)
+//stretching "metal" noise
+float noiseMetal (point PP, float f)
 {
-    float out = 0;
-    float freq = 1;
-    for(int i=0;i<8;++i)
+	float out = 0;
+	float freq = f;
+	for(int i=0;i<8;++i)
 	{
-	    out+=abs((float)noise("uperlin",PP[0]*freq)/freq);
-	    freq*=2.1;
+		out+=abs((float)noise("uperlin",PP[0]*freq)/freq);
+		freq*=2.1;
+	}
+return out;
+}
+//turbulence noise
+float turb (point PP, float f)
+{
+	float out = 0;
+	float freq = f;
+	for(int i=0;i<8;++i)
+	{
+		out+=abs((float)noise("perlin",PP*freq)/freq);
+		freq*=2.1;
 	}
 return out;
 }
 
-//dates shader
+//dates shader function
 color dates (point shaderP)
 {
 	return (color)texture("metal.tx",shaderP[0]/6+0.5,shaderP[1]/6+0.5);
 }
 
-
+//allows to combine dates texture and the noise
 color faceMix(color c1, color c2)
 {
-	//normal NN=transform("referenceFrame",N);
 	if(c2[0] < 0.7)
-	//< 0.2
 		return c2;
 	else
 		return mix(c1, c2, noise("perlin", P)*0.2);
 }
-
+//displacement for the top disk
 float metalDisp (point shaderP)
 {
-	//if (resultF)
-	//	disp = -0.2;
 	return (float)texture("metalDispT.tx",shaderP[0]/7.4+0.5,shaderP[1]/7.4+0.5) * 0.2;
 }
+//creates tiny metal scratches
+float scratches (point PP)
+{
+	point newP = PP;
+	newP[0]*=20;
+	return 1-smoothstep(0.01,0.06,turb(newP,4));
+}
 
+float lerp(float a, float b, float x)
+{
+	return (1-x)*a+x*b;
+}
+//need for correct colour
+color colerp(color a, color b, float x)
+{
+	color C;
+	C[0]=lerp(a[0],b[0],x);
+	C[1]=lerp(a[1],b[1],x);
+	C[2]=lerp(a[2],b[2],x);
+	return C;
+}
 
+//calendar shader
 shader objshader(
 	output float disp=0,
 	output color forScrew=0,
-	output color Cout=0
+	output color Cout=0,
+	output float rough=0
 )
 {
 	disp=metalDisp(transform("object",P));
-	//prevent from applying dates texture to the screw and torus
-	forScrew=noiseMetal(transform("referenceFrame",P));
-	//Cout=noiseMetal(transform("referenceFrame",P));
+	rough+=scratches(transform("object",P));
+	color scratchColor = color(1,1,1);
+	//forScrew prevents from applying dates texture to the screw and torus
+	forScrew=noiseMetal(transform("referenceFrame",P),1);
+	forScrew=colerp(forScrew,scratchColor,5*scratches(transform("object",P)));
 	Cout=forScrew;
+	//applies dates texture only on the top disk/"face"
 	if(N[2]<0)
 		Cout = faceMix(Cout,dates(transform("object",P)));
 }

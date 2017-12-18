@@ -1,8 +1,12 @@
 #calendar.rib
 Option "searchpath" "archive" ["."]
 Option "searchpath" "texture" ["./envMaps"]
-Display "calendar.exr" "it" "rgb"
-Format 640 480 1.0
+Display "calendar2.exr" "tiff" "rgb"
+Format 1280 720 1.0
+
+Quantize "rgba" 255 0 255 0
+
+Exposure 1 2.2
 
 Hider "raytrace" "int incremental" [1]
 
@@ -10,26 +14,35 @@ Integrator "PxrPathTracer" "integrator"
 
 Projection "perspective" "fov" [ 70 ]
 
-Rotate -90 1 0 0
-Translate 0 -6 0
-#Rotate -120 1 0 0
-#Translate 0 -6 -3
+DepthOfField 5.0 0.45 4.5
+
+Rotate -138 1 0 0
+Translate 0 -7.5 -3
 
 WorldBegin
-
-Light "PxrDomeLight" "theLight" "float exposure" [0] "string lightColorMap" ["room.tx"]
+AttributeBegin
+	Light "PxrDomeLight" "theLight" 
+	"float exposure" [0] 
+	"string lightColorMap" ["room.tx"]
+	"int enableShadows" [1]
+	"color shadowColor" [0.02 0.02 0.05]
+AttributeEnd
 
 TransformBegin
 
-
 	CoordinateSystem "referenceFrame"
 	Pattern "objshader" "object"
-	Bxdf "PxrDisney" "forTheDisk" "reference color baseColor" ["object:Cout"] "float metallic" [0.7] "float roughness" [ 0.09 ]
+	Bxdf "PxrDisney" "forTheDisk" 
+	"reference color baseColor" ["object:Cout"] 
+	"float metallic" [1] 
+	"reference float roughness" [ "object:rough" ] 
+	"float anisotropic" [0.7] 
+	"float clearcoat" [1] 
+	"float clearcoatGloss" [1]
 
-	Rotate -90 1 0 0
-	#Rotate 90 0 1 0
-	#Rotate -45 0 0 1
-	#Translate 0 2 0
+	Rotate -4 1 0 0
+	Rotate -1 0 1 0
+	Translate 0 3 -0.577
 
 	#base
 	Cylinder 3 -0.2 0.2 360
@@ -38,13 +51,22 @@ TransformBegin
 	AttributeBegin
 		#screw
 		AttributeBegin
-			Bxdf "PxrDisney" "forTheScrew" "reference color baseColor" ["object:forScrew"] "float metallic" [ 0.7 ] "float roughness" [ 0.09 ]
+			#prevent from applying dates texture to the screw
+			Bxdf "PxrDisney" "forTheScrew" 
+			"reference color baseColor" ["object:forScrew"] 
+			"float metallic" [1] 
+			"reference float roughness" [ "object:rough" ] 
+			"float anisotropic" [0.7] 
+			"float clearcoat" [0.5]
 			ReadArchive "screw.rib"
 		AttributeEnd
 
 		#displacement for years and week days
 		Attribute "displacementbound" "float sphere" [2]
-		Displace "PxrDisplace" "displace" "reference float dispScalar" ["object:disp"] "float dispAmount" [0.2]
+		Displace "PxrDisplace" "displace" 
+		"reference float dispScalar" ["object:disp"] 
+		"float dispAmount" [0.2]
+
 		ShadingRate 0.2
 		Disk 0.16 3 360
 	AttributeEnd
@@ -55,20 +77,25 @@ TransformBegin
 		Disk -0.2 3 360
 	AttributeEnd
 
-	#ring with chain
+	#ring
 	AttributeBegin
-		Bxdf "PxrDisney" "forTheTorus" "reference color baseColor" ["object:forScrew"] "float metallic" [ 0.7 ] "float roughness" [ 0.09 ]
-		Rotate -90 1 -90 0
-		Translate 0 -3.3 0
+		#prevent from applying dates texture to the torus
+		Bxdf "PxrDisney" "forTheTorus" 
+		"reference color baseColor" ["object:forScrew"] 
+		"float metallic" [1] 
+		"reference float roughness" [ "object:rough" ] 
+		"float anisotropic" [0.7] 
+		"float clearcoat" [0.5]
+		Rotate -90 1 0 0
+		Rotate 90 0 1 0
+		Rotate 10 1 0 0
+		Translate 3.3 -0.07 0
 		Torus 0.6 0.12 0 360 360
 	AttributeEnd
 
 TransformEnd
-
-#Rotate 90 0 1 0
-#make a shader for wooden table (with disp)
-#Pattern "PxrTexture" "table" "string filename" ["Hackberry_pxr128.tx"]
-#Bxdf "PxrDisney" "forTheSphere" "reference color baseColor" ["table:resultRGB"]
-##Bxdf "PxrDisney" "forTheSphere" "color baseColor" [1 1 1]
-##Patch "bilinear" "P" [1 -10 10   1 -10 -10   1 10 10   1 10 -10]
+#table
+Rotate 90 0 1 0
+Bxdf "PxrDisney" "forTheSphere" "color baseColor" [1 1 1] "float roughness" [1]
+Patch "bilinear" "P" [1 -50 50   1 -50 -50   1 50 50   1 50 -50]
 WorldEnd
